@@ -1,0 +1,1 @@
+Gives segregation indexes in order to compare US public school districts against each other in terms of racial segregation. Based on the Mutual Information Index and Atkinson Index (using national racial demographic weightings) from the 2011 article "Measuring school segregation" by David M. Frankel and Oscar Volij (https://doi.org/10.1016/j.jet.2010.10.008).
