@@ -1,0 +1,30 @@
+name: Deploy Map
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Replace secrets in HTML
+        run: |
+          sed -i 's|SEGMAP_MAPBOX_ACCESS_TOKEN|${{ secrets.SEGMAP_MAPBOX_ACCESS_TOKEN }}|g' index.html
+          sed -i 's|SEGMAP_MAPBOX_STYLE_URL|${{ secrets.SEGMAP_MAPBOX_STYLE_URL }}|g' index.html
+          sed -i 's|DIST_MUTUAL_ID|${{ secrets.DIST_MUTUAL_ID }}|g' index.html
+          sed -i 's|DIST_DIST_ATKINSON_ID|${{ secrets.DIST_DIST_ATKINSON_ID }}|g' index.html
+          sed -i 's|DIST_STATE_ATKINSON_ID|${{ secrets.DIST_STATE_ATKINSON_ID }}|g' index.html
+          sed -i 's|DIST_NATION_ATKINSON_ID|${{ secrets.DIST_NATION_ATKINSON_ID }}|g' index.html
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: .
