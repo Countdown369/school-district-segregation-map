@@ -53,17 +53,17 @@ body { margin: 0; padding: 0; }
 <div id="map"></div>
 
 <div id="menu">
-    <input id="" type="radio" name="rtoggle" value="" checked="checked">
-    <label for="">Mutual Information Index</label>
+    <input id="cm7qf911301jv01qv0g225f0j" type="radio" name="rtoggle" value="cm7qf911301jv01qv0g225f0j" checked="checked">
+    <label for="cm7qf911301jv01qv0g225f0j">Mutual Information Index</label>
     
-    <input id="" type="radio" name="rtoggle" value="Atkinson Index (School District)">
-    <label for="">Atkinson Index (School District)</label>
+    <input id="cm7qhvszu01k001qvfew225i1" type="radio" name="rtoggle" value="Atkinson Index (School District)">
+    <label for="cm7qhvszu01k001qvfew225i1">Atkinson Index (School District)</label>
     
-    <input id="" type="radio" name="rtoggle" value="Atkinson Index (State)">
-    <label for="">Atkinson Index (State)</label>
+    <input id="cm7qi07k8000h01s0e9d35xnm" type="radio" name="rtoggle" value="Atkinson Index (State)">
+    <label for="cm7qi07k8000h01s0e9d35xnm">Atkinson Index (State)</label>
     
-    <input id="" type="radio" name="rtoggle" value="Atkinson Index (Nation)">
-    <label for="">Atkinson Index (Nation)</label>
+    <input id="cm7qhyvpe000d01s02tga1ppi" type="radio" name="rtoggle" value="Atkinson Index (Nation)">
+    <label for="cm7qhyvpe000d01s02tga1ppi">Atkinson Index (Nation)</label>
 </div>
     
 <div class="map-overlay" id="features">
@@ -72,21 +72,21 @@ body { margin: 0; padding: 0; }
 </div>
 <script>
     const propertyMap = {
-        '': {property: 'DistMutual', title: "Mutual Information Index"},
-        '': {property: 'DistDistAtkinson', title: "Atkinson Index (School District)"},
-        '': {property: 'DistStateAtkinson', title: "Atkinson Index (State)"},
-        '': {property: 'DistNationAtkinson', title: "Atkinson Index (Nation)"}
+        'cm7qf911301jv01qv0g225f0j': {property: 'DistMutual', title: "Mutual Information Index"},
+        'cm7qhvszu01k001qvfew225i1': {property: 'DistDistAtkinson', title: "Atkinson Index (School District)"},
+        'cm7qi07k8000h01s0e9d35xnm': {property: 'DistStateAtkinson', title: "Atkinson Index (State)"},
+        'cm7qhyvpe000d01s02tga1ppi': {property: 'DistNationAtkinson', title: "Atkinson Index (Nation)"}
     };
 
-    let currentProperty = propertyMap[''].property; 
-    let currentTitle = propertyMap[''].title;
+    let currentProperty = propertyMap['cm7qf911301jv01qv0g225f0j'].property; 
+    let currentTitle = propertyMap['cm7qf911301jv01qv0g225f0j'].title;
     document.querySelector('.map-overlay h2').textContent = currentTitle
     
-	mapboxgl.accessToken = '';
+	mapboxgl.accessToken = 'pk.eyJ1IjoiY2Ficm93bjgwMiIsImEiOiJjbDJhd2w3c3gwOW5nM2NxYXQ4bG15Y3VsIn0.741svQSpMev_SFMZ9t7V_Q';
     const map = new mapboxgl.Map({
         container: 'map', // container ID
         // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
-        style: '', // style URL
+        style: 'mapbox://styles/cabrown802/cm7qf911301jv01qv0g225f0j', // style URL
         center: [-101.88481, 39.53962], // starting position [lng, lat]
         zoom: 3.4, // starting zoom
         minZoom: 3
