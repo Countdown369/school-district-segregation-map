@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Change a map's style</title>
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.js"></script>
+<style>
+h2,
+h3 {
+  margin: 10px;
+  font-size: 18px;
+}
+
+h3 {
+  font-size: 16px;
+}
+p {
+  margin: 10px;
+}
+body { margin: 0; padding: 0; }
+#map { position: absolute; top: 0; bottom: 0; width: 100%; }
+.map-overlay {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background: #fff;
+  margin-right: 20px;
+  font-family: Arial, sans-serif;
+  overflow: auto;
+  border-radius: 3px;
+}
+
+#features {
+  top: 0;
+  height: 133px;
+  margin-top: 20px;
+  width: 250px;
+}
+</style>
+</head>
+<body>
+<style>
+    #menu {
+        position: absolute;
+        background: #efefef;
+        padding: 10px;
+        font-family: 'Open Sans', sans-serif;
+    }
+</style>
+
+<div id="map"></div>
+
+<div id="menu">
+    <input id="" type="radio" name="rtoggle" value="" checked="checked">
+    <label for="">Mutual Information Index</label>
+    
+    <input id="" type="radio" name="rtoggle" value="Atkinson Index (School District)">
+    <label for="">Atkinson Index (School District)</label>
+    
+    <input id="" type="radio" name="rtoggle" value="Atkinson Index (State)">
+    <label for="">Atkinson Index (State)</label>
+    
+    <input id="" type="radio" name="rtoggle" value="Atkinson Index (Nation)">
+    <label for="">Atkinson Index (Nation)</label>
+</div>
+    
+<div class="map-overlay" id="features">
+  <h2>Segregation Index</h2>
+  <div id="pd"><p>Hover over a district!</p></div>
+</div>
+<script>
+    const propertyMap = {
+        '': {property: 'DistMutual', title: "Mutual Information Index"},
+        '': {property: 'DistDistAtkinson', title: "Atkinson Index (School District)"},
+        '': {property: 'DistStateAtkinson', title: "Atkinson Index (State)"},
+        '': {property: 'DistNationAtkinson', title: "Atkinson Index (Nation)"}
+    };
+
+    let currentProperty = propertyMap[''].property; 
+    let currentTitle = propertyMap[''].title;
+    document.querySelector('.map-overlay h2').textContent = currentTitle
+    
+	mapboxgl.accessToken = '';
+    const map = new mapboxgl.Map({
+        container: 'map', // container ID
+        // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
+        style: '', // style URL
+        center: [-101.88481, 39.53962], // starting position [lng, lat]
+        zoom: 3.4, // starting zoom
+        minZoom: 3
+    });
+    
+    map.on('load', () => {
+    // make a pointer cursor
+    map.getCanvas().style.cursor = 'default';
+    });
+    
+    map.on('mousemove', (event) => {
+      const states = map.queryRenderedFeatures(event.point, {
+        layers: ['hello-world']
+      });
+      document.getElementById('pd').innerHTML = states.length
+        ? `<h3>${states[0].properties.NAME}</h3><p><strong><em>${states[0].properties[currentProperty]?.toFixed(3)}</strong>.</em></p>`
+        : `<p>Hover over a district.</p>`;
+    });
+         
+    const layerList = document.getElementById('menu');
+    const inputs = layerList.getElementsByTagName('input');
+
+    for (const input of inputs) {
+        input.onclick = (layer) => {
+            const layerId = layer.target.id;
+            map.setStyle('mapbox://styles/cabrown802/' + layerId);
+            
+            if (propertyMap[layerId]) {
+                currentProperty = propertyMap[layerId].property;
+                currentTitle = propertyMap[layerId].title;
+            }
+            document.querySelector('.map-overlay h2').textContent = currentTitle
+        };
+    }
+</script>
+
+</body>
+</html>
