@@ -198,19 +198,19 @@
 
 <script>
     const propertyMap = {
-        'cm7qf911301jv01qv0g225f0j': {property: 'DistMutual', title: "Mutual Information Index"},
-        'cm7qhyvpe000d01s02tga1ppi': {property: 'DistNationAtkinson', title: "Atkinson Index (Nation)"}
+        'DIST_MUTUAL_ID': {property: 'DistMutual', title: "Mutual Information Index"},
+        'DIST_NATION_ATKINSON_ID': {property: 'DistNationAtkinson', title: "Atkinson Index (Nation)"}
     };
 
-    let currentProperty = propertyMap['cm7qf911301jv01qv0g225f0j'].property;
-    let currentTitle = propertyMap['cm7qf911301jv01qv0g225f0j'].title;
+    let currentProperty = propertyMap['DIST_MUTUAL_ID'].property;
+    let currentTitle = propertyMap['DIST_MUTUAL_ID'].title;
     document.getElementById('info-title').textContent = currentTitle;
 
-    mapboxgl.accessToken = 'pk.eyJ1IjoiY2Ficm93bjgwMiIsImEiOiJjbDJhd2w3c3gwOW5nM2NxYXQ4bG15Y3VsIn0.741svQSpMev_SFMZ9t7V_Q';
+    mapboxgl.accessToken = 'SEGMAP_MAPBOX_ACCESS_TOKEN';
 
     const map = new mapboxgl.Map({
         container: 'map',
-        style: 'mapbox://styles/cabrown802/cm7qf911301jv01qv0g225f0j',
+        style: 'SEGMAP_MAPBOX_STYLE_URL',
         center: [-101.88481, 39.53962],
         zoom: 3.4,
         minZoom: 3
@@ -221,25 +221,24 @@
     });
 
     map.on('mousemove', (event) => {
-        const states = map.queryRenderedFeatures(event.point, {
-            layers: ['hello-world']
-        });
+        const states = map.queryRenderedFeatures(event.point, { layers: ['hello-world'] });
+
         document.getElementById('pd').innerHTML = states.length
             ? `<h3>${states[0].properties.NAME}</h3><p><strong>${states[0].properties[currentProperty]?.toFixed(3)}</strong></p>`
             : `<p>Hover over a district.</p>`;
     });
 
-    const inputs = document.querySelectorAll('input[type="radio"]');
+    document.querySelectorAll('input[type="radio"]').forEach(input => {
+        input.onclick = (event) => {
+            const layerId = event.target.id;
 
-    inputs.forEach(input => {
-        input.onclick = (layer) => {
-            const layerId = layer.target.id;
             map.setStyle('mapbox://styles/cabrown802/' + layerId);
 
             if (propertyMap[layerId]) {
                 currentProperty = propertyMap[layerId].property;
                 currentTitle = propertyMap[layerId].title;
             }
+
             document.getElementById('info-title').textContent = currentTitle;
         };
     });
