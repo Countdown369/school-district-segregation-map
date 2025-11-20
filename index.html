@@ -221,25 +221,24 @@
     });
 
     map.on('mousemove', (event) => {
-        const states = map.queryRenderedFeatures(event.point, {
-            layers: ['hello-world']
-        });
+        const states = map.queryRenderedFeatures(event.point, { layers: ['hello-world'] });
+
         document.getElementById('pd').innerHTML = states.length
             ? `<h3>${states[0].properties.NAME}</h3><p><strong>${states[0].properties[currentProperty]?.toFixed(3)}</strong></p>`
             : `<p>Hover over a district.</p>`;
     });
 
-    const inputs = document.querySelectorAll('input[type="radio"]');
+    document.querySelectorAll('input[type="radio"]').forEach(input => {
+        input.onclick = (event) => {
+            const layerId = event.target.id;
 
-    inputs.forEach(input => {
-        input.onclick = (layer) => {
-            const layerId = layer.target.id;
             map.setStyle('mapbox://styles/cabrown802/' + layerId);
 
             if (propertyMap[layerId]) {
                 currentProperty = propertyMap[layerId].property;
                 currentTitle = propertyMap[layerId].title;
             }
+
             document.getElementById('info-title').textContent = currentTitle;
         };
     });
