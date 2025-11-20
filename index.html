@@ -2,117 +2,182 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>Change a map's style</title>
+<title>Segregation Map</title>
 <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.css" rel="stylesheet">
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.js"></script>
-<style>
-h2,
-h3 {
-  margin: 10px;
-  font-size: 18px;
-}
 
-h3 {
-  font-size: 16px;
-}
-p {
-  margin: 10px;
-}
-body { margin: 0; padding: 0; }
-#map { position: absolute; top: 0; bottom: 0; width: 100%; }
-.map-overlay {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  background: #fff;
-  margin-right: 20px;
-  font-family: Arial, sans-serif;
-  overflow: auto;
-  border-radius: 3px;
-}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 
-#features {
-  top: 0;
-  height: 133px;
-  margin-top: 20px;
-  width: 250px;
-}
-</style>
-</head>
-<body>
 <style>
-    #menu {
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Inter', sans-serif;
+    }
+
+    #map {
         position: absolute;
-        background: #efefef;
-        padding: 10px;
-        font-family: 'Open Sans', sans-serif;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+    }
+
+    .control-panel {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        background: #ffffff;
+        padding: 16px 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+        width: 280px;
+        z-index: 10;
+    }
+
+    .control-title {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+
+    .control-group label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 0;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+    input[type="radio"] {
+        accent-color: #3b82f6;
+        width: 16px;
+        height: 16px;
+    }
+
+    .sidebar-description {
+        position: absolute;
+        top: 140px;  /* pushes it below the control panel */
+        left: 20px;
+        width: 280px;
+        background: #ffffff;
+        padding: 14px 16px;
+        border-radius: 10px;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.10);
+        font-size: 14px;
+        line-height: 1.45;
+        z-index: 10;
+    }
+
+    .info-card {
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
+        background: #ffffff;
+        padding: 18px 22px;
+        width: 280px;
+        border-radius: 12px;
+        box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+        z-index: 10;
+    }
+
+    .info-card h2 {
+        margin: 0 0 8px 0;
+        font-size: 17px;
+        font-weight: 600;
+    }
+
+    .info-card p {
+        margin: 4px 0;
+        font-size: 14px;
     }
 </style>
 
+</head>
+<body>
+
 <div id="map"></div>
 
-<div id="menu">
-    <input id="cm7qf911301jv01qv0g225f0j" type="radio" name="rtoggle" value="cm7qf911301jv01qv0g225f0j" checked="checked">
-    <label for="cm7qf911301jv01qv0g225f0j">Mutual Information Index</label>
-    
-    <input id="cm7qhyvpe000d01s02tga1ppi" type="radio" name="rtoggle" value="Atkinson Index (Nation)">
-    <label for="cm7qhyvpe000d01s02tga1ppi">Atkinson Index (Nation)</label>
+<div class="control-panel">
+    <div class="control-title">Select Index</div>
+    <div class="control-group">
+        <label>
+            <input id="cm7qf911301jv01qv0g225f0j" type="radio" name="rtoggle" value="cm7qf911301jv01qv0g225f0j" checked>
+            Mutual Information Index
+        </label>
+        <label>
+            <input id="cm7qhyvpe000d01s02tga1ppi" type="radio" name="rtoggle" value="cm7qhyvpe000d01s02tga1ppi">
+            Atkinson Index (Nation)
+        </label>
+    </div>
 </div>
-    
-<div class="map-overlay" id="features">
-  <h2>Segregation Index</h2>
-  <div id="pd"><p>Hover over a district!</p></div>
+
+<div class="sidebar-description">
+    This map shows school year 2022–23 segregation indexes in US public school districts
+    in order to compare US public school districts against each other in terms of racial
+    segregation. It is based on the Mutual Information Index and Atkinson Index (the former
+    using national racial demographic weightings) defined within the 2011 article
+    <a href="https://doi.org/10.1016/j.jet.2010.10.008" target="_blank"><em>“Measuring school segregation”</em></a>
+    by David M. Frankel and Oscar Volij.
+    School enrollment data comes from the
+    <a href="https://nces.ed.gov/ccd/files.asp" target="_blank">Common Core of Data</a>
+    provided by the US National Center for Education Statistics.
 </div>
+
+<div class="info-card">
+    <h2 id="info-title">Segregation Index</h2>
+    <div id="pd"><p>Hover over a district!</p></div>
+</div>
+
 <script>
     const propertyMap = {
         'cm7qf911301jv01qv0g225f0j': {property: 'DistMutual', title: "Mutual Information Index"},
         'cm7qhyvpe000d01s02tga1ppi': {property: 'DistNationAtkinson', title: "Atkinson Index (Nation)"}
     };
 
-    let currentProperty = propertyMap['cm7qf911301jv01qv0g225f0j'].property; 
+    let currentProperty = propertyMap['cm7qf911301jv01qv0g225f0j'].property;
     let currentTitle = propertyMap['cm7qf911301jv01qv0g225f0j'].title;
-    document.querySelector('.map-overlay h2').textContent = currentTitle
-    
-	mapboxgl.accessToken = 'pk.eyJ1IjoiY2Ficm93bjgwMiIsImEiOiJjbDJhd2w3c3gwOW5nM2NxYXQ4bG15Y3VsIn0.741svQSpMev_SFMZ9t7V_Q';
+    document.getElementById('info-title').textContent = currentTitle;
+
+    mapboxgl.accessToken = 'pk.eyJ1IjoiY2Ficm93bjgwMiIsImEiOiJjbDJhd2w3c3gwOW5nM2NxYXQ4bG15Y3VsIn0.741svQSpMev_SFMZ9t7V_Q';
+
     const map = new mapboxgl.Map({
-        container: 'map', // container ID
-        // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
-        style: 'mapbox://styles/cabrown802/cm7qf911301jv01qv0g225f0j', // style URL
-        center: [-101.88481, 39.53962], // starting position [lng, lat]
-        zoom: 3.4, // starting zoom
+        container: 'map',
+        style: 'mapbox://styles/cabrown802/cm7qf911301jv01qv0g225f0j',
+        center: [-101.88481, 39.53962],
+        zoom: 3.4,
         minZoom: 3
     });
-    
-    map.on('load', () => {
-    // make a pointer cursor
-    map.getCanvas().style.cursor = 'default';
-    });
-    
-    map.on('mousemove', (event) => {
-      const states = map.queryRenderedFeatures(event.point, {
-        layers: ['hello-world']
-      });
-      document.getElementById('pd').innerHTML = states.length
-        ? `<h3>${states[0].properties.NAME}</h3><p><strong><em>${states[0].properties[currentProperty]?.toFixed(3)}</strong>.</em></p>`
-        : `<p>Hover over a district.</p>`;
-    });
-         
-    const layerList = document.getElementById('menu');
-    const inputs = layerList.getElementsByTagName('input');
 
-    for (const input of inputs) {
-        input.onclick = (layer) => {
-            const layerId = layer.target.id;
+    map.on('load', () => {
+        map.getCanvas().style.cursor = 'default';
+    });
+
+    map.on('mousemove', (event) => {
+        const states = map.queryRenderedFeatures(event.point, { layers: ['hello-world'] });
+
+        document.getElementById('pd').innerHTML = states.length
+            ? `<h3>${states[0].properties.NAME}</h3><p><strong>${states[0].properties[currentProperty]?.toFixed(3)}</strong></p>`
+            : `<p>Hover over a district.</p>`;
+    });
+
+    document.querySelectorAll('input[type="radio"]').forEach(input => {
+        input.onclick = (event) => {
+            const layerId = event.target.id;
+
             map.setStyle('mapbox://styles/cabrown802/' + layerId);
-            
+
             if (propertyMap[layerId]) {
                 currentProperty = propertyMap[layerId].property;
                 currentTitle = propertyMap[layerId].title;
             }
-            document.querySelector('.map-overlay h2').textContent = currentTitle
+
+            document.getElementById('info-title').textContent = currentTitle;
         };
-    }
+    });
 </script>
 
 </body>
