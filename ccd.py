@@ -1,3 +1,7 @@
+# Hello, EDC!
+# This file supports the wrangling of the dataset neccesary for the map at
+# https://countdown369.github.io/school-district-segregation-map/
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
